@@ -1,5 +1,20 @@
-Difficulty: medium to hard · Uses: Concept 8 (worktree), Concept 9 (skill), Concept 11 (maker-checker).
+# Project 4: A Fix with a Real Checker
 
-Build. A smaller version of the Part 5 loop. Write a short skill with your fix steps, and a reviewer agent that replies PASS or FAIL. Take one real bug, have the implementer draft a fix in its own checkout (worktree or branch), and let the reviewer grade it. Open a PR only on PASS.
+> **Difficulty:** Medium–Hard · **Concepts:** Concept 8 (Worktree), Concept 9 (Skill), Concept 11 (Maker-Checker)
 
-Done when two things are both true: a good fix gets a PASS and a PR, and a deliberately bad fix you plant gets a FAIL with reasons. If the reviewer passes the bad fix, your checker is too soft, so tighten it. A checker that approves everything is no checker.
+## Overview
+
+A smaller version of the Part 5 loop. You separate the **maker** (who drafts a fix) from the **checker** (who grades it). The fix is drafted in an isolated checkout, and a pull request opens only when the checker passes.
+
+## Build
+
+1. Write a short **skill** with your fix steps, and a **reviewer agent** that replies `PASS` or `FAIL`.
+2. Take one real bug. Have the implementer draft a fix in its own checkout (worktree or branch).
+3. Let the reviewer grade it. **Open a PR only on `PASS`.**
+
+## Definition of Done
+
+- [ ] A good fix gets a `PASS` and a PR.
+- [ ] A deliberately bad fix you plant gets a `FAIL` with reasons.
+
+> **The lesson:** a checker that approves everything is no checker. If the reviewer passes the bad fix, tighten it.
