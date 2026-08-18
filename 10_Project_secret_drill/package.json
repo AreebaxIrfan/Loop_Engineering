@@ -1,0 +1,9 @@
+{
+  "name": "secret-drill",
+  "version": "1.0.0",
+  "description": "Verify a secret is available locally via gitignored .env AND in the cloud-runner env secret store without exposing it.",
+  "type": "module",
+  "scripts": {
+    "verify": "node verify.mjs"
+  }
+}

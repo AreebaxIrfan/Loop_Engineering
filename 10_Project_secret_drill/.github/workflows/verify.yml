@@ -1,0 +1,24 @@
+name: verify-secret
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+jobs:
+  verify-cloud-runner-secret:
+    runs-on: ubuntu-latest
+    # The DRILL_SECRET value is supplied by the cloud-runner secret store.
+    # It is NEVER written into this file (which is committed).
+    env:
+      DRILL_SECRET: ${{ secrets.DRILL_SECRET }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+      # .env does not exist in CI, so verify.mjs will read from the
+      # inherited environment (the runner secret store). It never prints
+      # the raw value — it only compares a SHA-256 hash.
+      - name: Verify secret is available from runner environment store
+        run: node verify.mjs
