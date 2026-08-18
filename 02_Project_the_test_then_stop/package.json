@@ -1,0 +1,9 @@
+{
+  "name": "test-then-stop",
+  "version": "1.0.0",
+  "description": "Project with tests that need fixing",
+  "scripts": {
+    "test": "node test-runner.js",
+    "checker": "node checker.js"
+  }
+}
