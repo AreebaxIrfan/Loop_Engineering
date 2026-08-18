@@ -1,0 +1,6 @@
+# Local secrets for the human gate — NEVER commit this file
+# Copy from .env.example and fill in the values shown ONCE at token generation.
+.env
+
+# Local scratch / runtime state notes
+*.local
