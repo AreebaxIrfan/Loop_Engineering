@@ -1,0 +1,11 @@
+# Candidates worktrees
+.candidates/
+
+# Python
+__pycache__/
+*.pyc
+*.pyo
+.pytest_cache/
+
+# Logs
+*.log
