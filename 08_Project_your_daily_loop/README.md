@@ -1,63 +1,58 @@
-# Your Daily Loop - Capstone Project
+# 🏆 Project 8: Your Daily Loop — Capstone
 
-**Difficulty:** capstone · **Uses:** all six parts
+> **Difficulty:** 🔴 Capstone · **Time:** ~2 hrs
+> **Uses:** All six parts — Heartbeats, Maker-Checker, Worktree, Skills, Observability, Connectors
 
-## Overview
+---
 
-This capstone project combines every concept from Loop Engineering into one production-ready daily automation:
+## 🎬 The Scene
 
-1. **Scheduled Heartbeat** - Runs on a daily interval
-2. **Budget Guard** - Stops before exceeding token/turn limits
-3. **Maker-Checker** - Implementer produces change, reviewer verifies against real diff
-4. **Observability** - Logs cost and outcome per run
-5. **Worktree** - Isolated workspace for each run
-6. **Connector/Spine** - Integrates with project systems
+One loop to rule them all. A **production-ready daily dependency audit** that:
+- Runs on a schedule 💓
+- Guards budget 🛡️
+- Uses maker-checker ✅
+- Logs everything 📊
+- Isolates in worktrees 📦
+- Integrates with GitHub 🔗
 
-## The Chore: Dependency Audit
+**This is your graduation project.** Build it, run it for a week, and *trust it*.
 
-We'll automate a **weekly dependency audit** - checking for:
-- Outdated dependencies with security vulnerabilities
-- Breaking changes in major version updates
-- Unused dependencies that can be removed
+---
 
-## Implementation
+## 🧠 What You'll Build
 
-### Daily Routine Structure
-
+```mermaid
+flowchart TD
+    subgraph DAILY [Daily Heartbeat: /loop 1d]
+        A[Budget Check\n50k tokens / 10 turns] --> B{Maker Phase}
+        B --> C[Scan deps: npm audit / outdated]
+        C --> D[Create branch + apply updates]
+        D --> E[Run tests]
+        E --> F{Tests Pass?}
+        F -- No --> G[Log failure → Stop]
+        F -- Yes --> H[Checker Phase]
+        H --> I[Review git diff]
+        I --> J{Changes Safe?}
+        J -- No --> K[Log reasons → Stop]
+        J -- Yes --> L[Create PR]
+        L --> M[Log outcome to JSONL]
+    end
+    
+    M --> N[Observability: logs/daily-loop.jsonl]
+    
+    style A fill:#ffd43b,color:#000
+    style M fill:#51cf66,color:#fff
 ```
-/loop 1d run the daily routine:
-  1. Check token/turn budget (escalate if exceeded)
-  2. Run maker-checker task:
-     - Maker: Check dependencies, create update PR if needed
-     - Checker: Review the actual diff, verify changes are correct
-  3. Log cost and outcome to observability file
-  4. If budget exceeded, stop and escalate instead of continuing
-```
 
-### Budget Guards
+| File | Purpose |
+|------|---------|
+| `CLAUDE.md` | Project context for the loop |
+| `.claude/skills/daily-loop.md` | Skill definition |
+| `logs/daily-loop.jsonl` | **Observability log** (one line per run) |
+| `package.json` | Dependencies to audit |
 
-- **Token budget:** 50,000 tokens per run
-- **Turn budget:** 10 turns per run
-- **Escalation:** Stop and notify if either exceeded
+### Observability Log Format
 
-### Maker-Checker Pattern
-
-**Maker Phase:**
-1. Scan `package.json` for dependencies
-2. Run `npm audit` and `npm outdated`
-3. Identify security vulnerabilities and major updates
-4. Create a branch and apply updates
-5. Run tests to verify nothing breaks
-
-**Checker Phase:**
-1. Review the actual `git diff` of changes
-2. Verify each update is intentional and safe
-3. Check that tests pass
-4. Approve or request changes
-
-### Observability Log
-
-Each run logs to `logs/daily-loop.jsonl`:
 ```json
 {
   "timestamp": "2026-08-18T17:00:00Z",
@@ -70,31 +65,58 @@ Each run logs to `logs/daily-loop.jsonl`:
 }
 ```
 
-## Setup
+---
 
-1. Copy the `daily-loop-skill.md` to `.claude/skills/`
-2. Run `/loop 1d /daily-loop` to start the daily routine
-3. Monitor `logs/daily-loop.jsonl` for outcomes
+## 🚀 Quick Start
 
-## Files
+```bash
+mkdir /tmp/daily-loop && cd /tmp/daily-loop && git init
+# Add a package.json with deps to audit
+claude
+```
 
-- `CLAUDE.md` - Project context for Claude
-- `.claude/skills/daily-loop.md` - The skill definition
-- `logs/daily-loop.jsonl` - Observability log (created on first run)
-- `package.json` - Dependencies to audit (if applicable)
+> **Inside Claude:**
+```
+1. Copy daily-loop-skill.md to .claude/skills/
+2. Start the daily loop: /loop 1d /daily-loop
+3. Monitor logs/daily-loop.jsonl for outcomes
+```
 
-## Done When
+---
 
-- [ ] The loop runs unattended for a week
-- [ ] You trust what it ships because you read the logs
-- [ ] Budget guards prevent runaway execution
-- [ ] Maker-checker catches bad changes before merge
-- [ ] Observability provides clear audit trail
+## ✅ Definition of Done
 
-## Reflection (Concept 15)
+| ✓ | Requirement | The Test |
+|---|-------------|----------|
+| | **Runs unattended for a week** | 7 log entries in `daily-loop.jsonl` |
+| | **You trust what it ships** | You read logs, not code — logs tell the story |
+| | **Budget guards work** | Escalation logged if tokens/turns exceeded |
+| | **Maker-checker catches bad changes** | Plant a bad update → checker rejects it |
+| | **Observability = audit trail** | JSONL has timestamp, tokens, outcome, PR URL |
 
-After a week of running, answer honestly:
+---
 
-> Did your understanding of the project keep up with what the loop changed?
+## 💡 The Lesson You'll Take Away
 
-If not, slow the loop down until it does. When it fails overnight (and it will), work through "When an unattended loop fails" before blaming the model.
+> **Trust is earned through observability, not hope.**
+>
+> After a week, ask honestly:
+> > **Did my understanding of the project keep up with what the loop changed?**
+>
+> If not → **slow the loop down** until it does. When it fails overnight (and it will), work through "When an unattended loop fails" before blaming the model.
+
+---
+
+## 🧪 Try Breaking It
+
+| Sabotage | What You'll Learn |
+|----------|-------------------|
+| Remove budget guard | Runaway loop → $$$ → guards aren't optional |
+| Weaken checker prompt | Bad PR opens → checker quality = loop quality |
+| Skip observability | "It worked... I think" → you're flying blind |
+
+---
+
+## 🔗 What's Next?
+
+→ [Project 9: Rehearse a Routine](../09_Project_reharease_a_routine_daily/) — Appendix A: one-off runs and reading transcripts.

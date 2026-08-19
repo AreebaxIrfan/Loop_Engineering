@@ -1,48 +1,124 @@
-# Secret Drill
+# 🔐 Project 10: Secret Drill
 
-This project demonstrates and verifies two secret-delivery paths for the same logical secret:
+> **Type:** Hands-on Drill · **Difficulty:** 🟢 Hands-on · **Time:** ~30 min
+> **Concept:** Secret delivery — local vs cloud runner (never printed, never committed)
 
-1. **Local execution** — secret comes from a **gitignored `.env`** file at repo root
-2. **Cloud-runner execution** — secret comes from the **runner's environment secret store** (e.g., GitHub Actions `secrets`, GitLab CI `variables`, Azure Pipelines `secret variables`)
+---
 
-The secret value itself is **never printed** and **never committed**. Both paths are verified programmatically.
+## 🎬 The Scene
 
-## Secret contract
+Two environments. One secret. **Never printed. Never committed.** Both paths verified programmatically.
 
-- Name: `DRILL_SECRET`
-- Expected value (for verification only): a non-empty string known to the operator
-- Verification: hash the value (SHA-256) and compare against a stored **expected hash** (committed); this proves the correct secret is present without exposing it.
+**This drill proves your secret plumbing works** — locally (`.env`) and in CI (GitHub Actions secrets, GitLab variables, etc.).
 
-## Files
+---
 
-- `.env` — **gitignored**. Create locally with `DRILL_SECRET=your_value_here`
-- `.env.example` — committed template (no real value)
-- `verify.mjs` — Node verification script. Reads `DRILL_SECRET` from `process.env`, hashes it, compares to `EXPECTED_HASH`
-- `package.json` — `npm run verify` runs the check
-- `.github/workflows/verify.yml` — CI workflow that runs the same check using the runner's secret store
+## 🧠 What You'll Build
 
-## Local verification
+```mermaid
+flowchart LR
+    subgraph LOCAL [Local Execution]
+        A[.env.example] --> B[cp → .env]
+        B --> C[Edit .env\nDRILL_SECRET=xxx]
+        C --> D[npm run verify]
+    end
+    
+    subgraph CLOUD [Cloud Runner]
+        E[Runner Secret Store\nGitHub Actions / GitLab / Azure] --> F[Push → Workflow Runs]
+        F --> G[npm run verify\nUses runner's env]
+    end
+    
+    D --> H{Hash Matches\nEXPECTED_HASH?}
+    G --> H
+    H -- Yes --> I[✅ Secret Delivered Correctly]
+    H -- No --> J[❌ Wrong Secret / Missing]
+    
+    style H fill:#ffd43b,color:#000
+    style I fill:#51cf66,color:#fff
+```
+
+| File | Purpose | Committed? |
+|------|---------|------------|
+| `.env` | **Local secret** (gitignored) | ❌ Never |
+| `.env.example` | Template | ✅ Yes |
+| `verify.mjs` | Reads `process.env.DRILL_SECRET`, hashes, compares to `EXPECTED_HASH` | ✅ Yes |
+| `package.json` | `npm run verify` | ✅ Yes |
+| `.github/workflows/verify.yml` | CI workflow | ✅ Yes |
+
+---
+
+## 🚀 Quick Start
 
 ```bash
-# 1. Create .env from template
+mkdir /tmp/secret-drill && cd /tmp/secret-drill && git init
+claude
+```
+
+> **Inside Claude:**
+```
+Set up the secret drill:
+1. Create .env.example template
+2. Create verify.mjs that hashes DRILL_SECRET and compares to EXPECTED_HASH
+3. Create package.json with npm run verify
+4. Create .github/workflows/verify.yml for CI
+5. Generate EXPECTED_HASH for your chosen secret
+```
+
+### Local Verification
+
+```bash
 cp .env.example .env
-# 2. Edit .env and set DRILL_SECRET=your_actual_secret
-# 3. Run verification
+# Edit .env → DRILL_SECRET=your_actual_secret
 npm run verify
 ```
 
-## Cloud-runner verification
+### Cloud Verification
 
-1. Add `DRILL_SECRET` to your runner's secret store (GitHub: Settings → Secrets → Actions; GitLab: Settings → CI/CD → Variables; etc.)
-2. Push; the workflow runs automatically and verifies the secret is available in the runner environment.
+1. Add `DRILL_SECRET` to runner's secret store (GitHub: Settings → Secrets → Actions)
+2. Push → workflow runs automatically
 
-## Expected hash
-
-The committed `EXPECTED_HASH` in `verify.mjs` is the SHA-256 of the correct secret value. To set it:
+### Generate Expected Hash
 
 ```bash
-# Generate the hash for your chosen secret
 node -e "console.log(require('crypto').createHash('sha256').update('YOUR_SECRET_VALUE').digest('hex'))"
+# Paste output into verify.mjs as EXPECTED_HASH
 ```
 
-Paste the output into `verify.mjs` as `EXPECTED_HASH`.
+---
+
+## ✅ Definition of Done
+
+| ✓ | Requirement | The Test |
+|---|-------------|----------|
+| | **Local verification passes** | `npm run verify` → ✅ |
+| | **Cloud verification passes** | CI workflow green → ✅ |
+| | **Secret never printed** | No secret in logs, output, or repo |
+| | **Hash comparison works** | Wrong secret → ❌ |
+
+---
+
+## 💡 The Lesson You'll Take Away
+
+> **Secrets have two delivery paths — both must work, both must be verified, neither exposes the value.**
+>
+> - **Local:** `.env` (gitignored) → `process.env`
+> - **Cloud:** Runner secret store → `process.env`
+> - **Verification:** Hash comparison against committed `EXPECTED_HASH`
+>
+> The secret value itself is **never printed, never committed, never logged.**
+
+---
+
+## 🧪 Try Breaking It
+
+| Sabotage | What You'll Learn |
+|----------|-------------------|
+| Commit `.env` with real secret | Git history leak → `.gitignore` is mandatory |
+| Wrong `EXPECTED_HASH` | Verification fails → hash must match exactly |
+| Forget to add secret to CI | Workflow fails → cloud path needs explicit config |
+
+---
+
+## 🔗 What's Next?
+
+→ [Project 11: Build a Two-Routine Gate](../11_Project_build_two_routine_gate/) — Human gate: Routine A drafts, Routine B approves via API trigger.
