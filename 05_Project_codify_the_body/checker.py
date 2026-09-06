@@ -27,17 +27,18 @@ def test_calculate_average_empty_list():
         return True
 
 
+
 def test_calculate_average_normal():
     """Test normal average calculation."""
     result = calculate_average([1, 2, 3, 4, 5])
     expected = 3.0
-    if result == expected:
+
+    if math.isclose(result, expected, rel_tol=1e-9, abs_tol=1e-9):
         print(f"PASS: calculate_average([1,2,3,4,5]) = {result}")
         return True
     else:
         print(f"FAIL: calculate_average([1,2,3,4,5]) expected {expected}, got {result}")
         return False
-
 
 def test_safe_divide_zero():
     """Test safe_divide with zero divisor."""
