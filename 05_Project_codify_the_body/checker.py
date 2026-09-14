@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 """Checker script to validate fixes pass tests and handle edge cases."""
 import sys
+import math
 from math_utils import divide, calculate_average, safe_divide
 
 
@@ -43,7 +44,7 @@ def test_calculate_average_normal():
 def test_safe_divide_zero():
     """Test safe_divide with zero divisor."""
     result = safe_divide(10, 0)
-    if result == 0:
+    if math.isclose(result, 0, rel_tol=1e-9, abs_tol=1e-9):
         print(f"PASS: safe_divide(10, 0) = {result} (default)")
         return True
     else:
@@ -54,7 +55,7 @@ def test_safe_divide_zero():
 def test_safe_divide_custom_default():
     """Test safe_divide with custom default."""
     result = safe_divide(10, 0, default=-1)
-    if result == -1:
+    if math.isclose(result, -1, rel_tol=1e-9, abs_tol=1e-9):
         print(f"PASS: safe_divide(10, 0, default=-1) = {result}")
         return True
     else:
@@ -65,7 +66,7 @@ def test_safe_divide_custom_default():
 def test_safe_divide_normal():
     """Test safe_divide normal case."""
     result = safe_divide(10, 2)
-    if result == 5.0:
+    if math.isclose(result, 5.0, rel_tol=1e-9, abs_tol=1e-9):
         print(f"PASS: safe_divide(10, 2) = {result}")
         return True
     else:
